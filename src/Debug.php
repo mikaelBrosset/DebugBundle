@@ -8,7 +8,7 @@ namespace MikaelBrosset\DebugBundle;
 
 class Debug
 {
-    const ERRORLEVELS = [
+    protected const ERRORLEVELS = [
             'E_ALL',
             'E_PARSE',
             'E_ERROR',
@@ -45,6 +45,10 @@ class Debug
 
     public function enable($level = 'E_ALL', $excludes = [], $log = null) : string
     {
+        if (!in_array($level, $this::ERRORLEVELS)) {
+            throw new UnexpectedErrorLevelException("There is no such error level as $level");
+        }
+
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
 
