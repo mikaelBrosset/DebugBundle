@@ -31,21 +31,9 @@ class Debug
     private $debugLevel = '';
     private $debugLevelConstant = 0;
 
-    public function enableAll() : string
+    public function enable($level = 'E_ALL') : string
     {
-        $level = 'E_ALL';
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-
-        $this->isDebugActive = 1;
-        $this->debugLevel = $level;
-        $this->debugLevelConstant = constant($level);
-        return error_reporting(constant($level));
-    }
-
-    public function enable($level = 'E_ALL', $excludes = [], $log = null) : string
-    {
-        if (!in_array($level, $this::ERRORLEVELS)) {
+        if (!in_array($level = strtoupper($level), $this::ERRORLEVELS)) {
             throw new UnexpectedErrorLevelException("There is no such error level as $level");
         }
 
@@ -58,11 +46,12 @@ class Debug
         return error_reporting(constant($level));
     }
 
-    public function disableAll() : void
+    public function disable() : void
     {
         ini_set('display_errors', 0);
         ini_set('display_startup_errors', 0);
         $this->isDebugActive = 0;
+        $this->debugLevel = '';
     }
 
     public function getDebugLevel() : string
