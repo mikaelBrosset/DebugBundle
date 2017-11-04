@@ -46,6 +46,27 @@ class Debug
         return error_reporting(constant($level));
     }
 
+    public function enableAndLog($level = 'E_ALL', $log = 1, $logFile = '/var/log/php-erros.log', $errorMaxLength =  1024, $ignoreRepeatedErrors = 1, $syslog = 0)
+    {
+        if ($log) {
+            ini_set('log_errors', $log);
+
+            if ($syslog) {
+                ini_set('error_log', 'syslog');
+
+            } else {
+                if (!file_exists($logFile)) {
+                    touch($logFile);
+                }
+                ini_set('error_log', $logFile);
+                ini_set('log_errors_max_len', $errorMaxLength);
+            }
+        }
+
+        return $this->enable($level);
+
+    }
+
     public function disable() : void
     {
         ini_set('display_errors', 0);
