@@ -46,7 +46,7 @@ class Debug
         return error_reporting(constant($level));
     }
 
-    public function enableAndLog($level = 'E_ALL', $log = 1, $logFile = '/var/log/php-erros.log', $errorMaxLength =  1024, $ignoreRepeatedErrors = 1, $syslog = 0)
+    public function enableAndLog($level = 'E_ALL', $log = 1, $logFile = '/var/log/php-erros.log', $errorMaxLength =  1024, $ignoreRepeatedErrors = 1, $syslog = 0) : string
     {
         if ($log) {
             ini_set('log_errors', $log);

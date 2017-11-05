@@ -2,7 +2,8 @@
 /**
  * Author: Mikael Brosset
  * Email: mikael.brosset@gmail.com
- * Date: 26/10/17
+ *
+ * This class is the same as Debug.php but suited for PHP 5. I strongly recommend a switch to PHP 7 as it enhances security a lot.
  */
 namespace MikaelBrosset\DebugBundle;
 
@@ -44,6 +45,27 @@ class DebugPHP5
         $this->debugLevel = $level;
         $this->debugLevelConstant = constant($level);
         return error_reporting(constant($level));
+    }
+
+    public function enableAndLog($level = 'E_ALL', $log = 1, $logFile = '/var/log/php-erros.log', $errorMaxLength =  1024, $ignoreRepeatedErrors = 1, $syslog = 0)
+    {
+        if ($log) {
+            ini_set('log_errors', $log);
+
+            if ($syslog) {
+                ini_set('error_log', 'syslog');
+
+            } else {
+                if (!file_exists($logFile)) {
+                    touch($logFile);
+                }
+                ini_set('error_log', $logFile);
+                ini_set('log_errors_max_len', $errorMaxLength);
+            }
+        }
+
+        return $this->enable($level);
+
     }
 
     public function disable()
